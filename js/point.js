@@ -9,7 +9,7 @@ export class Point extends Vector {
         this.velocity = new Vector(0, 0);
         this.acc = new Vector(0, 0);
         this.friction = 0.1;
-        this.mass = 1;
+        this.mass = 5;
         this.invMass = 1 / this.mass;
         this.fixed = fixed;
         this.motor = false;
@@ -19,13 +19,11 @@ export class Point extends Vector {
 
     setPointDrawPath() {
         this.drawPath = true;
-        if(this.drawPath) {
-            this.canvas = document.createElement('canvas');
-            this.context = this.canvas.getContext('2d');
-            document.body.append(this.canvas);
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
-        }
+        this.canvas = document.createElement('canvas');
+        this.context = this.canvas.getContext('2d');
+        document.body.append(this.canvas);
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
     }
 
     static loadPoint(pointData) {
@@ -78,7 +76,6 @@ export class Point extends Vector {
             this.context.beginPath();
             this.context.arc(this.x, this.y, size, 0, completeCircleAngle);
             this.context.fill();
-            this.context.stroke();
         }
     }
 }

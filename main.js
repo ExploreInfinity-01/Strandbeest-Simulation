@@ -24,7 +24,7 @@ function addForce(x, y, label) {
     return force
 }
 const gravity = addForce(0, 9, 'gravity'); // Gravity
-const wind = addForce(5, 0, 'wind'); // wind
+const wind = addForce(0, 0, 'wind'); // wind
 
 // Structure
 const structure = new Structure();
@@ -114,10 +114,12 @@ function animate(timestamp=0) {
     const deltaTime = (timestamp - lastTime) * 0.001;
     lastTime = timestamp;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    structure.update(deltaTime, forces);
-    structure.draw(ctx);
+    if (document.hasFocus()) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        structure.update(deltaTime, forces);
+        structure.draw(ctx);
+    }
 
     requestAnimationFrame(animate)
 }
