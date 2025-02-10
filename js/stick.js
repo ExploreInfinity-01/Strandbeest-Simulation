@@ -10,7 +10,7 @@ export class Stick {
         if((this.p1.fixed && this.p1.motor) || (this.p2.fixed && this.p2.motor)) {
             this.stickVec = this.p1.motor ? this.p1.subtract(this.p2) : this.p2.subtract(this.p1);            
         }
-        this.currentLength = this.length;
+        this.currentLength = this.p1.subtract(this.p2);
     }
 
     update() {
@@ -30,22 +30,6 @@ export class Stick {
             }
         }
     }
-
-    // update() {
-    //     const dirOfStick = this.p1.subtract(this.p2).normalize();
-    //     const midPoint = Vector.midPoint(this.p1, this.p2);
-        
-    //     this.p1.updatePos(dirOfStick.scale(this.halfLength).add(midPoint));
-    //     const remainingStickLen = this.length - this.p1.subtract(midPoint).magnitude();
-    //     this.p2.updatePos(dirOfStick.scale(-remainingStickLen).add(midPoint));
-        
-    //     let stickLen = this.p1.subtract(this.p2).magnitude();
-    //     if(stickLen < this.length) {
-    //         const remainingStickLen = this.length - this.p2.subtract(midPoint).magnitude();
-    //         this.p1.updatePos(dirOfStick.scale(remainingStickLen).add(midPoint));
-    //         stickLen = this.p1.subtract(this.p2).magnitude();
-    //     }
-    // }
 
     draw(context, { width=2, color='black' }={}) {
         context.strokeStyle = color;

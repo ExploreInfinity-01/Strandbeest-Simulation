@@ -27,7 +27,6 @@ const gravity = addForce(0, 9, 'gravity'); // Gravity
 const wind = addForce(0, 0, 'wind'); // wind
 
 // Structure
-const structure = new Structure();
 const stickLengths = {
     "a": 38, 
     "b": 41.5, 
@@ -45,27 +44,50 @@ const stickLengths = {
 };
 for(const key of Object.keys(stickLengths)) stickLengths[key] *= 3;
 const { a, b, c, d, e, f, g, h, i, j, k, l, m } = stickLengths;
-const fixedPoint = structure.addPoint(window.innerWidth*0.6, 300, true);
-const { point: pointLM, stick: stickL } = structure.createPointAndStick(fixedPoint, l, degToRad(-90), true, true);
-const { point: pointAC, stick: stickA } = structure.createPointAndStick(fixedPoint, a, degToRad(180), true);
-const { point: pointMJ, stick: stickM } = structure.createPointAndStick(pointLM, m, degToRad(-90));
-const { point: pointJE, stick: stickJ } = structure.createPointAndStick(pointMJ, j, degToRad(-160));
-const { point: pointEF, stick: stickE } = structure.createPointAndStick(pointJE, e, degToRad(125));
-const { point: pointFH, stick: stickF } = structure.createPointAndStick(pointEF, f, degToRad(80));
-const { point: pointHI, stick: stickH } = structure.createPointAndStick(pointFH, h, degToRad(45));
-const { point: pointCI, stick: stickC } = structure.createPointAndStick(pointAC, c, degToRad(75));
-// pointLM.fixed = true;
-// pointAC.fixed = true;
-const stickB = structure.addStick(pointJE, pointAC, b);
-const stickI = structure.addStick(pointCI, pointHI, i);
-const stickD = structure.addStick(pointEF, pointAC, d);
-const stickG = structure.addStick(pointFH, pointCI, g);
-const stickK = structure.addStick(pointMJ, pointCI, k);
 
-pointHI.setPointDrawPath();
-structure.changeTimeSpeed(5)
+const structure1 = new Structure();
+const structure2 = new Structure();
 
-const sticks = { stickA, stickB, stickC, stickD, stickE, stickF, stickG, stickH, stickI, stickJ, stickK, stickL, stickM };
+function createLegStructure(structure, x, y, flip=false) {
+    const stickAngles = {
+        "a": 180, 
+        "c": 75, 
+        "e": 125, 
+        "f": 80, 
+        "h": 45, 
+        "j": -160, 
+        "l": -90, 
+        "m": -90, 
+    };
+    if(flip) {
+        for(const key of Object.keys(stickLengths)) {
+            if(stickAngles[key] > 0) stickAngles[key] = 180 - stickAngles[key];
+            if(stickAngles[key] < 0) stickAngles[key] = -180 - stickAngles[key];
+        }
+    }
+    const fixedPoint = structure.addPoint(x, y, true);
+    const { point: pointLM, stick: stickL } = structure.createPointAndStick(fixedPoint, l, degToRad(stickAngles.l), true, true);
+    const { point: pointAC, stick: stickA } = structure.createPointAndStick(fixedPoint, a, degToRad(stickAngles.a), true);
+    const { point: pointMJ, stick: stickM } = structure.createPointAndStick(pointLM, m, degToRad(stickAngles.m));
+    const { point: pointJE, stick: stickJ } = structure.createPointAndStick(pointMJ, j, degToRad(stickAngles.j));
+    const { point: pointEF, stick: stickE } = structure.createPointAndStick(pointJE, e, degToRad(stickAngles.e));
+    const { point: pointFH, stick: stickF } = structure.createPointAndStick(pointEF, f, degToRad(stickAngles.f));
+    const { point: pointHI, stick: stickH } = structure.createPointAndStick(pointFH, h, degToRad(stickAngles.h));
+    const { point: pointCI, stick: stickC } = structure.createPointAndStick(pointAC, c, degToRad(stickAngles.c));
+    const stickB = structure.addStick(pointJE, pointAC, b);
+    const stickI = structure.addStick(pointCI, pointHI, i);
+    const stickD = structure.addStick(pointEF, pointAC, d);
+    const stickG = structure.addStick(pointFH, pointCI, g);
+    const stickK = structure.addStick(pointMJ, pointCI, k);
+    
+    pointHI.setPointDrawPath();
+    structure.changeTimeSpeed(5)
+    structure.stable();
+    const sticks = { stickA, stickB, stickC, stickD, stickE, stickF, stickG, stickH, stickI, stickJ, stickK, stickL, stickM };
+}
+
+createLegStructure(structure1, window.innerWidth*0.45, 400)
+createLegStructure(structure2, window.innerWidth*0.55, 400, true)
 
 // const fixedPoint = structure.addPoint(window.innerWidth*0.75, 300, true);
 // fixedPoint.motor = true;
@@ -108,10 +130,11 @@ const sticks = { stickA, stickB, stickC, stickD, stickE, stickF, stickG, stickH,
 
 // points.push(point1, point2, point3, point4, point5, point6, point7);
 
-const structure2 = new Structure();
-structure2.addStick(structure2.addPoint(400, 400), structure2.addPoint(400, 500));
+// const structure2 = new Structure();
+// structure2.addStick(structure2.addPoint(400, 400), structure2.addPoint(400, 500));
 
 let lastTime = 0;
+const structures = [structure1, structure2];
 function animate(timestamp=0) {
     const deltaTime = (timestamp - lastTime) * 0.001;
     lastTime = timestamp;
@@ -119,8 +142,11 @@ function animate(timestamp=0) {
     if (document.hasFocus()) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        structure.update(deltaTime, forces);
-        structure.draw(ctx);        
+        for(const structure of structures) {
+            structure.update(deltaTime, forces);
+            structure.stable();
+            structure.draw(ctx);
+        }
     }
 
     requestAnimationFrame(animate)
