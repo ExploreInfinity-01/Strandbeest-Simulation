@@ -45,7 +45,7 @@ const stickLengths = {
 for(const key of Object.keys(stickLengths)) stickLengths[key] *= 3;
 const { a, b, c, d, e, f, g, h, i, j, k, l, m } = stickLengths;
 
-const strandbeest = { width: 100, y: 400 }
+const strandbeest = { width: 80, y: 400 }
 
 const structure1 = new Structure();
 const structure2 = new Structure();
