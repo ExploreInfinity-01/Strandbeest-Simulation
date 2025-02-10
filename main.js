@@ -45,6 +45,8 @@ const stickLengths = {
 for(const key of Object.keys(stickLengths)) stickLengths[key] *= 3;
 const { a, b, c, d, e, f, g, h, i, j, k, l, m } = stickLengths;
 
+const strandbeest = { width: 100, y: 400 }
+
 const structure1 = new Structure();
 const structure2 = new Structure();
 const structure3 = new Structure();
@@ -95,10 +97,10 @@ function createLegStructure(structure, x, y, flip=false, rotate=0) {
     return { points, sticks }
 }
 
-const leftFrontLeg = createLegStructure(structure1, window.innerWidth*0.45, 400, false, 0);
-const rightFrontLeg = createLegStructure(structure1, window.innerWidth*0.45, 400, false, 120);
-const leftRearLeg = createLegStructure(structure2, window.innerWidth*0.55, 400, true, 0);
-const rightRearLeg = createLegStructure(structure2, window.innerWidth*0.55, 400, true, 120);
+const leftFrontLeg = createLegStructure(structure1, (window.innerWidth-strandbeest.width)*0.5, strandbeest.y, false, 0);
+const rightFrontLeg = createLegStructure(structure1, (window.innerWidth-strandbeest.width)*0.5, strandbeest.y, false, 120);
+const leftRearLeg = createLegStructure(structure2, (window.innerWidth+strandbeest.width)*0.5, strandbeest.y, true, 0);
+const rightRearLeg = createLegStructure(structure2, (window.innerWidth+strandbeest.width)*0.5, strandbeest.y, true, 120);
 
 const structure5 = new Structure();
 structure3.addStick(leftFrontLeg.points.fixedPoint, leftRearLeg.points.fixedPoint);
