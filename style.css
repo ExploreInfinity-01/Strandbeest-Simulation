@@ -18,7 +18,7 @@ canvas {
     width: 55px;
 }
 
-label {
+label, h1 {
     font-size: 20px;
     position: absolute;
     top: 30px;
@@ -26,4 +26,9 @@ label {
     translate: -50% 0;
     z-index: 1;
     width: max-content;
+}
+
+h1 {
+    font-size: 25px;
+    font-weight: normal;
 }
