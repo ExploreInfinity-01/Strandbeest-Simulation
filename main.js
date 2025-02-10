@@ -14,6 +14,8 @@ function setCanvasSize() {
 setCanvasSize();
 window.addEventListener('resize', () => setCanvasSize());
 
+console.log(window.innerWidth*0.1);
+
 
 // Forces
 const forces = [];
@@ -50,7 +52,6 @@ const strandbeest = { width: 80, y: 400 }
 const structure1 = new Structure();
 const structure2 = new Structure();
 const structure3 = new Structure();
-const structure4= new Structure();
 
 function createLegStructure(structure, x, y, flip=false, rotate=0) {
     const stickAngles = {
@@ -98,19 +99,25 @@ function createLegStructure(structure, x, y, flip=false, rotate=0) {
 }
 
 const leftFrontLeg = createLegStructure(structure1, (window.innerWidth-strandbeest.width)*0.5, strandbeest.y, false, 0);
-const rightFrontLeg = createLegStructure(structure1, (window.innerWidth-strandbeest.width)*0.5, strandbeest.y, false, 120);
-const leftRearLeg = createLegStructure(structure2, (window.innerWidth+strandbeest.width)*0.5, strandbeest.y, true, 0);
+const rightFrontLeg = createLegStructure(structure2, (window.innerWidth-strandbeest.width)*0.5, strandbeest.y, false, 120);
+const middleFrontLeg = createLegStructure(structure2, (window.innerWidth-strandbeest.width)*0.5, strandbeest.y, false, 240);
+const leftRearLeg = createLegStructure(structure1, (window.innerWidth+strandbeest.width)*0.5, strandbeest.y, true, 0);
 const rightRearLeg = createLegStructure(structure2, (window.innerWidth+strandbeest.width)*0.5, strandbeest.y, true, 120);
+const middleRearLeg = createLegStructure(structure2, (window.innerWidth+strandbeest.width)*0.5, strandbeest.y, true, 240);
 
-const structure5 = new Structure();
-structure3.addStick(leftFrontLeg.points.fixedPoint, leftRearLeg.points.fixedPoint);
-structure3.addStick(rightFrontLeg.points.fixedPoint, rightRearLeg.points.fixedPoint);
-structure3.addStick(rightFrontLeg.points.fixedPoint, leftRearLeg.points.fixedPoint);
-structure3.addStick(leftFrontLeg.points.fixedPoint, rightRearLeg.points.fixedPoint);
-structure3.addStick(rightFrontLeg.points.fixedPoint, leftFrontLeg.points.fixedPoint);
-structure3.addStick(rightRearLeg.points.fixedPoint, leftRearLeg.points.fixedPoint);
-structure3.changeTimeSpeed(5);
-structure3.stable();
+structure1.addStick(leftFrontLeg.points.fixedPoint, leftRearLeg.points.fixedPoint);
+structure2.addStick(rightFrontLeg.points.fixedPoint, rightRearLeg.points.fixedPoint);
+structure3.addStick(middleFrontLeg.points.fixedPoint, middleRearLeg.points.fixedPoint);
+
+const structure4 = new Structure();
+structure4.addStick(leftFrontLeg.points.fixedPoint, rightFrontLeg.points.fixedPoint);
+structure4.addStick(leftFrontLeg.points.fixedPoint, middleFrontLeg.points.fixedPoint);
+structure4.addStick(middleFrontLeg.points.fixedPoint, rightFrontLeg.points.fixedPoint);
+structure4.addStick(leftRearLeg.points.fixedPoint, rightRearLeg.points.fixedPoint);
+structure4.addStick(leftRearLeg.points.fixedPoint, middleRearLeg.points.fixedPoint);
+structure4.addStick(middleRearLeg.points.fixedPoint, rightRearLeg.points.fixedPoint);
+structure4.changeTimeSpeed(5);
+structure4.stable();
 
 // const fixedPoint = structure.addPoint(window.innerWidth*0.75, 300, true);
 // fixedPoint.motor = true;
@@ -157,19 +164,18 @@ structure3.stable();
 // structure2.addStick(structure2.addPoint(400, 400), structure2.addPoint(400, 500));
 
 let lastTime = 0;
-const structures = [structure1, structure2, structure3, structure4, structure5];
+const structures = [structure1, structure2, structure3, structure4];
 function animate(timestamp=0) {
     const deltaTime = (timestamp - lastTime) * 0.001;
     lastTime = timestamp;
 
     if (document.hasFocus()) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
         for(const structure of structures) {
             structure.update(deltaTime, forces);
             structure.stable();
-            structure.draw(ctx);
         }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for(const structure of structures) structure.draw(ctx);
     }
 
     requestAnimationFrame(animate)
