@@ -11,3 +11,18 @@ canvas {
     translate: -50% -50%;
     /* background-color: gray; */
 }
+
+#iterations {
+    padding: 5px;
+    width: 55px;
+}
+
+label {
+    font-size: 20px;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    translate: -50% 0;
+    z-index: 1;
+    width: max-content;
+}

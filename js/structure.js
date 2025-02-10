@@ -37,7 +37,10 @@ export class Structure {
     update(deltaTime, forces) {
         const updatedDeltaTime = deltaTime * this.timeSpeed;
         for(const point of this.points) point.update(updatedDeltaTime, forces);
-        for(const stick of this.sticks) stick.update(updatedDeltaTime);
+        const iterations = document.getElementById('iterations');
+        for(let i = 0; i < Number(iterations.value); i++) {
+            for(const stick of this.sticks) stick.update(updatedDeltaTime);
+        }
     }
 
     draw(context) {

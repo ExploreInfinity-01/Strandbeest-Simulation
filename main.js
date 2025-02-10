@@ -63,7 +63,9 @@ const stickG = structure.addStick(pointFH, pointCI, g);
 const stickK = structure.addStick(pointMJ, pointCI, k);
 
 pointHI.setPointDrawPath();
-structure.changeTimeSpeed(1)
+structure.changeTimeSpeed(5)
+
+const sticks = { stickA, stickB, stickC, stickD, stickE, stickF, stickG, stickH, stickI, stickJ, stickK, stickL, stickM };
 
 // const fixedPoint = structure.addPoint(window.innerWidth*0.75, 300, true);
 // fixedPoint.motor = true;
@@ -118,7 +120,7 @@ function animate(timestamp=0) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         structure.update(deltaTime, forces);
-        structure.draw(ctx);
+        structure.draw(ctx);        
     }
 
     requestAnimationFrame(animate)
